@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advertisement Sales Prediction</title>
+    <style>
+        body {
+            background-image: url('/static/images/sales img.webp');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            margin-top: 3px;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+        }
+
+        #prediction-form {
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        #prediction-result {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Advertisement Sales Prediction</h1>
+    <form id="prediction-form">
+        <label for="tv">TV:</label>
+        <input type="number" id="tv" name="tv" step="any">
+        <br>
+        <label for="radio">Radio:</label>
+        <input type="number" id="radio" name="radio" step="any">
+        <br>
+        <label for="newspaper">Newspaper:</label>
+        <input type="number" id="newspaper" name="newspaper" step="any">
+        <br>
+        <button type="button" onclick="predictSales()">Predict Sales</button>
+    </form>
+
+    <div id="prediction-result"></div>
+
+    <script>
+        // Function to predict charges
+        function predictSales() {
+            var formData = new FormData(document.getElementById('prediction-form'));
+
+            fetch('/api/predict', {
+                method: 'POST',
+                body: formData
+            }).then(response => response.json()).then(data => {
+                document.getElementById('prediction-result').innerText = 'Predicted Sales: ' + data.prediction;
+            });
+        }
+    </script>
+
+
+</body>
+
+</html>

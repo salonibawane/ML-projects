@@ -1,0 +1,1 @@
+MODEL_FILE_PATH = r"artfifacts\linear_regression.pkl"
