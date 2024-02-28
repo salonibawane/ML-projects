@@ -1,0 +1,104 @@
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Insurance Charges Prediction</title>
+    <style>
+        body {
+            background-image: url('/static/images/medical_insurance.webp');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            font-family: Arial, sans-serif;
+        }
+
+        #prediction-form {
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        #prediction-result {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <form id="prediction-form">
+        <label for="age">Age:</label>
+        <input type="text" id="age" name="age" required><br>
+
+        <label for="bmi">BMI:</label>
+        <input type="text" id="bmi" name="bmi" required><br>
+
+        <label for="gender">Gender:</label>
+        <select id="gender" name="gender"></select><br>
+
+        <label for="children">Children:</label>
+        <select id="children" name="children"></select><br>
+
+        <label for="smoker">Smoker:</label>
+        <select id="smoker" name="smoker"></select><br>
+
+        <label for="region">Region:</label>
+        <select id="region" name="region"></select><br>
+
+        <button type="button" onclick="predictCharges()">Predict Charges</button>
+    </form>
+
+    <div id="prediction-result"></div>
+
+    <script>
+        // Fetch dropdown options for categorical columns
+        fetch('/api/gender_options').then(response => response.json()).then(data => {
+            fillDropdown('gender', data);
+        });
+
+        fetch('/api/children_options').then(response => response.json()).then(data => {
+            fillDropdown('children', data);
+        });
+
+        fetch('/api/smoker_options').then(response => response.json()).then(data => {
+            fillDropdown('smoker', data);
+        });
+
+        fetch('/api/region_options').then(response => response.json()).then(data => {
+            fillDropdown('region', data);
+        });
+
+        // Function to fill dropdown options
+        function fillDropdown(id, options) {
+            var dropdown = document.getElementById(id);
+
+            options.forEach(option => {
+                var optionElement = document.createElement('option');
+                optionElement.value = option;
+                optionElement.text = option;
+                dropdown.add(optionElement);
+            });
+        }
+
+        // Function to predict charges
+        function predictCharges() {
+            var formData = new FormData(document.getElementById('prediction-form'));
+
+            fetch('/api/predict', {
+                method: 'POST',
+                body: formData
+            }).then(response => response.json()).then(data => {
+                document.getElementById('prediction-result').innerText = 'Predicted Charges: ' + data.prediction;
+            });
+        }
+    </script>
+</body>
+</html>
