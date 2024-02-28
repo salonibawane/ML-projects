@@ -1,0 +1,84 @@
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Insurance Charges Prediction</title>
+    <style>
+        body {
+            background-image: url('/static/images/marketingandsales.webp');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            font-family: Arial, sans-serif;
+        }
+
+        #prediction-form {
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        #prediction-result {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <form id="prediction-form">
+        <label for="tv">TV:</label><br>
+        <input type="text" id="tv" name="tv"><br>
+        <label for="radio">Radio:</label><br>
+        <input type="text" id="radio" name="radio"><br>
+        <label for="socialmedia">Social Media:</label><br>
+        <input type="text" id="socialmedia" name="socialmedia"><br>
+        <label for="influencer">Influencer:</label><br>
+        <select id="influencer" name="influencer"></select><br>
+
+        <button type="button" onclick="predictSales()">Predict sales</button>
+    </form>
+
+    <div id="prediction-result"></div>
+
+    <script>
+        // Fetch dropdown options for categorical columns
+
+        fetch('/api/influencer_options').then(response => response.json()).then(data => {
+            fillDropdown('influencer', data);
+        });
+
+        // Function to fill dropdown options
+        function fillDropdown(id, options) {
+            var dropdown = document.getElementById(id);
+
+            options.forEach(option => {
+                var optionElement = document.createElement('option');
+                optionElement.value = option;
+                optionElement.text = option;
+                dropdown.add(optionElement);
+            });
+        }
+
+        // Function to predict charges
+        function predictSales() {
+            var formData = new FormData(document.getElementById('prediction-form'));
+
+            fetch('/api/predict', {
+                method: 'POST',
+                body: formData
+            }).then(response => response.json()).then(data => {
+                document.getElementById('prediction-result').innerText = 'Predicted Sales: ' + data.prediction;
+            });
+        }
+    </script>
+</body>
+</html>
