@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Insurance Fraud Prediction</title>
+    <style>
+        body {
+            background-image: url('static/fraud-scam-phishing-caution-deception-concept_53876-120442.jpg');
+            background-size: cover;
+            background-position: center;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: white;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        input[type="range"] {
+            width: calc(100% - 40px);
+            margin-top: 5px;
+            margin-bottom: 15px;
+        }
+        input[type="text"],
+        select {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        #prediction-result {
+            font-weight: bold;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1 style="text-align: center;">Insurance Fraud Prediction</h1>
+    <div style="background-color: rgba(0, 0, 0, 0.5); padding: 20px; max-width: 500px; margin: auto; border-radius: 10px;">
+        <form id="prediction-form">
+            <div class="form-group">
+                <label for="months_as_customer">Months as Customer:</label>
+                <input type="range" id="months_as_customer" name="months_as_customer" min="0" max="600" value="0">
+                <span id="months_as_customer_value">0</span>
+            </div>
+            <div class="form-group">
+                <label for="policy_deductable">Policy Deductible:</label>
+                <input type="range" id="policy_deductable" name="policy_deductable" min="500" max="2000" value="500" step="500">
+                <span id="policy_deductable_value">500</span>
+            </div>
+            <div class="form-group">
+                <label for="umbrella_limit">Umbrella Limit:</label>
+                <input type="range" id="umbrella_limit" name="umbrella_limit" min="0" max="3000000" value="0" step="1000000">
+                <span id="umbrella_limit_value">0</span>
+            </div>
+            <div class="form-group">
+                <label for="age">Age:</label>
+                <input type="text" id="age" name="age" placeholder="Enter Age">
+            </div>
+            <div class="form-group">
+                <label for="total_claim_amount">Total Claim Amount:</label>
+                <input type="range" id="total_claim_amount" name="total_claim_amount" min="0" max="100000" value="0" step="1000">
+                <span id="total_claim_amount_value">0</span>
+            </div>
+            <div class="form-group">
+                <label for="gender">Gender:</label>
+                <select name="gender" id="gender">
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="claim_type">Claim Type:</label>
+                <select name="claim_type" id="claim_type">
+                    <option value="Medical">Medical</option>
+                    <option value="Property">Property</option>
+                    <option value="Vehicle">Vehicle</option>
+                </select>
+            </div>
+            <!-- Additional features -->
+            <div id="prediction-result"></div>
+            <button type="button" onclick="predictResult()">Predict</button>
+        </form>
+    </div>
+
+    <script>
+        function predictResult() {
+            // Fetch values
+            var months_as_customer = parseInt(document.getElementById("months_as_customer").value);
+            var policy_deductable = parseInt(document.getElementById("policy_deductable").value);
+            var umbrella_limit = parseInt(document.getElementById("umbrella_limit").value);
+            var age = parseInt(document.getElementById("age").value);
+            var total_claim_amount = parseInt(document.getElementById("total_claim_amount").value);
+            var gender = document.getElementById("gender").value;
+            var claim_type = document.getElementById("claim_type").value;
+            // Calculate predicted result (Dummy logic)
+            var prediction = (months_as_customer > 300 || policy_deductable > 1000 || umbrella_limit > 1000000 || age > 60 || total_claim_amount > 50000 || gender === 'Male' || claim_type === 'Vehicle') ? "YES" : "NO";
+            // Display prediction result
+            document.getElementById("prediction-result").innerText = "Predicted Result: " + prediction;
+        }
+
+        // Update range slider values dynamically
+        var sliders = document.querySelectorAll("input[type='range']");
+        sliders.forEach(function(slider) {
+            var valueDisplay = document.getElementById(slider.id + "_value");
+            valueDisplay.textContent = slider.value;
+            slider.addEventListener("input", function() {
+                valueDisplay.textContent = this.value;
+            });
+        });
+    </script>
+</body>
+</html>
